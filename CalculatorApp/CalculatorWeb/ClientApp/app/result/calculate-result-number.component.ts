@@ -1,0 +1,13 @@
+import { Component, Input } from '@angular/core';
+
+import { ICalculateResultComponent } from '../models/calculate-result';
+
+@Component({
+    template: `
+        <div>{{data.result}}</div> 
+  `
+})
+export class CalculateResultNumberComponent implements ICalculateResultComponent {
+    @Input() data: any;
+}
+

@@ -1,0 +1,43 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+    <div class="jumbotron">
+        <h1>{{title}}</h1>
+    </div>
+</div>
+
+<p *ngIf="!(operators$ && resultTypes$)"><em>Loading...</em></p>
+<div style="text-align: center">
+    <!--<form [formGroup]="calculateForm">-->
+    
+    <div *ngIf="operators$ && resultTypes$">
+
+        <input [(ngModel)]="operationDto.a" placeholder="Input first argument" /> <!--formControlName="A"-->
+        <!--<div >
+        <div>Select operator</div>-->
+        <select [(ngModel)]="operationDto.operator">
+            <option *ngFor="let operator of operators$ | async" [value]="operator">{{ operator }}</option>
+        </select>
+        <!--</div>-->
+
+        <input [(ngModel)]="operationDto.b" placeholder="Input second argument" /><!--formControlName="B"-->
+        <!-- <div >
+         <div>Select Result Type</div>-->
+        <select [(ngModel)]="operationDto.resultType">
+            <option *ngFor="let resultType of resultTypes$ | async" [value]="resultType">{{ resultType }}</option>
+        </select>
+    <!--</div>-->
+
+        <input type="submit" (click)="calculate()" />
+    </div>
+    
+    <p></p>
+    <!--<div *ngIf="calculateResult$" id="result111">
+        {{calculateResult$.result}}
+    </div>-->
+    
+    <p></p>
+    <div *ngIf="calculateResult" >
+        <calculateresult [calculateResult]="calculateResult"></calculateresult>
+    </div>
+   <!-- </form>-->
+</div>

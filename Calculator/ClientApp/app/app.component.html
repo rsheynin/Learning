@@ -1,0 +1,71 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+    <div class="jumbotron">
+        <h1>{{title}}</h1>
+    </div>
+</div>
+
+<p *ngIf="!(operators$ && resultTypes$)"><em>Loading...</em></p>
+<div style="text-align: center">
+    <div *ngIf="operators$ && resultTypes$">
+
+        <input [(ngModel)]="operationDto.a" placeholder="Input first argument" /> <!--formControlName="A"-->
+
+        <select [(ngModel)]="operationDto.operator" placeholder="Select operator">
+            <!-- <option selected>Select operator</option>-->
+            <option *ngFor="let operator of operators$ | async" [value]="operator">{{ operator }}</option>
+        </select>
+
+        <input [(ngModel)]="operationDto.b" placeholder="Input second argument" /><!--formControlName="B"-->
+
+        <select [(ngModel)]="operationDto.resultType">
+            <option *ngFor="let resultType of resultTypes$ | async" [value]="resultType">{{ resultType }}</option>
+        </select>
+
+        <input type="submit" (click)="calculate()" />
+    </div>
+    
+    
+    <p></p>
+    <div *ngIf="calculateResult$" id="result111">
+        {{calculateResult$.result}}
+    </div>
+    
+    <p></p>
+    <input type="submit" (click)="getOperators()" />
+    <div *ngIf="calculateResult$" >
+        {{calculateResult$.result}}
+    </div>
+
+    <div *ngIf="calculateResult$" id="result222">
+        
+        <!--<calculate-result [calculateResult]="calculateResult$"></calculate-result>-->
+
+        
+        <!--<ng-container *ngTemplateOutlet="calculateResult.type; context: calculateResult"></ng-container>-->
+        
+        <!--<ng-container [ngTemplateOutlet]="this[calculateResult.type]; context: calculateResult"></ng-container>-->
+        
+        <!--<ng-container *ngTemplateOutlet="number; context: calculateResult"></ng-container>
+    <ng-container *ngTemplateOutlet="parity; context: calculateResult"></ng-container>
+    <ng-container *ngTemplateOutlet="color; context: calculateResult"></ng-container>-->
+    </div>
+
+</div>
+
+<ng-template #number>
+    <div>{{calculateResult.result}}</div> 
+</ng-template>
+
+
+<ng-template #color>
+    <div [style.background-color]="calculateResult.color">{{calculateResult.result}}</div>
+</ng-template>
+
+
+<ng-template #parity>
+        <div>{{calculateResult.result}}</div> 
+        <p></p>
+        <div>{{calculateResult.parity}}</div> 
+</ng-template>
+
