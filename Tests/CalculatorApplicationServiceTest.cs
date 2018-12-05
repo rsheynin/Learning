@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using CalculatorApplicationCore.ApplicationServices;
-using CalculatorApplicationCore.Const;
-using CalculatorApplicationCore.Operations;
-using CalculatorApplicationCore.ResultBuilder;
+using Calculate.Common.Const;
+using Calculator.Application.Service;
+using Calculator.Operation.Domain.Service;
+using Calculator.ResultBuilder.Domain.Service;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

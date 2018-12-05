@@ -1,6 +1,6 @@
-﻿using CalculatorApplicationCore.ApplicationServices;
-using CalculatorApplicationCore.Operations;
-using CalculatorApplicationCore.ResultBuilder;
+﻿using Calculator.Application.Service;
+using Calculator.Operation.Domain.Service;
+using Calculator.ResultBuilder.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CalculatorWeb.Controllers

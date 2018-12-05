@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CalculatorApplicationCore.ResultBuilder;
+using Calculator.ResultBuilder.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CalculatorWeb.Controllers

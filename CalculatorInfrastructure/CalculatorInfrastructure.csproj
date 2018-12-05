@@ -10,7 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CalculatorApp\CalculatorApplicationCore\CalculatorApplicationCore.csproj" />
+    <ProjectReference Include="..\CalculatorApp\CalculatorApplicationCore\Calculator.Application.Service.csproj" />
+    <ProjectReference Include="..\Domain\Calculator.ResultBuilder.Domain.Service\Calculator.ResultBuilder.Domain.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

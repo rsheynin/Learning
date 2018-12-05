@@ -14,7 +14,6 @@ namespace CalculatorInfrastructure
 
             builder.Populate(services);
 
-            builder.RegisterModule<CalculatorIoCModule>();
             
             var appContainer = builder.Build();
 

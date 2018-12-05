@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using CalculatorApplicationCore.ApplicationServices;
-using CalculatorApplicationCore.Operations;
-using CalculatorApplicationCore.ResultBuilder;
+using Calculator.Application.Service;
+using Calculator.Operation.Domain.Service;
+using Calculator.ResultBuilder.Domain.Service;
 
 namespace CalculatorInfrastructure
 {
@@ -12,6 +12,7 @@ namespace CalculatorInfrastructure
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CalculateOperatorService>().As<ICalculateOperatorService>();
+            builder.RegisterType<CalculateResultTypeService>().As<ICalculateResultTypeService>();
             builder.RegisterType<CalculatorApplicationService>().As<ICalculatorApplicationService>();
 
             builder.RegisterType<Plus>().As<ICalculateOperation>();
@@ -23,23 +24,22 @@ namespace CalculatorInfrastructure
             builder.RegisterType<CalculateResultBuilderColor>().As<ICalculateResultBuilder>();
             builder.RegisterType<CalculateResultBuilderParity>().As<ICalculateResultBuilder>();
 
-            var container = builder.Build();
             builder.Register(ctx =>
                 {
-                    var operations = container.Resolve<IEnumerable<ICalculateOperation>>()
+                    var operations = ctx.Resolve<IEnumerable<ICalculateOperation>>()
                         .ToDictionary(x => x.Type.ToString());
                     return operations;
                 })
-                .As<IDictionary<string, ICalculateOperation>>().SingleInstance();
+                .As<IDictionary<string, ICalculateOperation>>();//.SingleInstance();
 
 
             builder.Register((ctx) =>
                 {
-                    var result = container.Resolve<IEnumerable<ICalculateResultBuilder>>()
+                    var result = ctx.Resolve<IEnumerable<ICalculateResultBuilder>>()
                         .ToDictionary(x => x.Type.ToString());
                     return result;
                 })
-                .As<IDictionary<string, ICalculateOperation>>().SingleInstance();
+                .As<IDictionary<string, ICalculateResultBuilder>>();//.SingleInstance();
         }
     }
 }
