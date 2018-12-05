@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Autofac.Multitenant;
-using Calculator.Application.Service;
-using Calculator.Operation.Domain.Service;
-using Calculator.ResultBuilder.Domain.Service;
+﻿using Autofac;
 using CalculatorInfrastructure;
-using CalculatorWeb.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -53,21 +44,8 @@ namespace CalculatorWeb
                 configuration.RootPath = "wwwroot/clientapp/dist";
             });
 
-
-            #region Controllers
-
-            //// If you want to set up a controller for, say, property injection
-            //// you can override the controller registration after populating services.
-            //builder.RegisterType<CalculateController>().PropertiesAutowired();
-            //builder.RegisterType<CalculateResultTypeController>().PropertiesAutowired();
-            //builder.RegisterType<OperatorController>().PropertiesAutowired();
-
-            #endregion
-
             //IoCRegistration(services);
-            //var serviceProvider = IoCContainerInitializer.Initialize(services);
-
-            //return serviceProvider;
+            
         }
 
 
