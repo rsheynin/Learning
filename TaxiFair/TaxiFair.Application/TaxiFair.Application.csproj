@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaxiFair.Domain\TaxiFair.Domain.csproj" />
+    <ProjectReference Include="..\TaxiFair.Infrastructure\TaxiFair.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
