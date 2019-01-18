@@ -16,13 +16,13 @@ namespace TaxiFareIntegrationTests
     public class TaxiFairApplicationServiceTest
     {
         private TaxiFairApplicationService _target;
-        private IFareRateRepository _stubFareRateRepository;
+        private IFareRateRepository _fakeFareRateRepository;
         private ICompanyFeeRepository _stubCompanyFeeRepository;
         private ICarRepository _stubCarRepository;
         private IFareRateService _fareRateService;
         private ITaxiFairCalculatorService _taxiFairCalculatorService;
         private IDateTimeWrapper _stubDateTimeWrapper;
-        private FareRateDto _fakeFareRateDto = new FareRateDto(10, "license");
+        private FareRateDto _dummyFareRateDto = new FareRateDto(10, "license");
 
         private DateTime _fakeDayDate = new DateTime(2019, 01, 15, 15, 00, 00);
         private DateTime _fakeNightDate = new DateTime(2019, 01, 15, 23, 00, 00);
@@ -52,12 +52,12 @@ namespace TaxiFareIntegrationTests
             _fareRateService = container.Resolve<IFareRateService>();
             _taxiFairCalculatorService = container.Resolve<ITaxiFairCalculatorService>();
 
-            _stubFareRateRepository = A.Fake<IFareRateRepository>();
+            _fakeFareRateRepository = A.Fake<IFareRateRepository>();
             _stubCompanyFeeRepository = A.Fake<ICompanyFeeRepository>();
             _stubCarRepository = A.Fake<ICarRepository>();
             _stubDateTimeWrapper = A.Fake<IDateTimeWrapper>();
 
-            _target = new TaxiFairApplicationService(_stubFareRateRepository,
+            _target = new TaxiFairApplicationService(_fakeFareRateRepository,
                 _stubCompanyFeeRepository,
                 _stubCarRepository,
                 _fareRateService,
@@ -70,9 +70,9 @@ namespace TaxiFareIntegrationTests
         {
             A.CallTo(() => _stubDateTimeWrapper.Now()).Returns(_fakeDayDate);
 
-            A.CallTo(() => _stubFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
 
-            var actual = _target.Calculate(_fakeFareRateDto);
+            var actual = _target.Calculate(_dummyFareRateDto);
             var expected = 10;
             Assert.AreEqual(expected, actual);
         }
@@ -82,9 +82,9 @@ namespace TaxiFareIntegrationTests
         {
             A.CallTo(() => _stubDateTimeWrapper.Now()).Returns(_fakeNightDate);
 
-            A.CallTo(() => _stubFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
 
-            var actual = _target.Calculate(_fakeFareRateDto);
+            var actual = _target.Calculate(_dummyFareRateDto);
             var expected = 15;
             Assert.AreEqual(expected, actual);
         }

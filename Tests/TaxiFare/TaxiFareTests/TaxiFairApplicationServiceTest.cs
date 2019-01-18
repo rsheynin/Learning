@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TaxiFair.Application;
@@ -7,6 +5,7 @@ using TaxiFair.Domain;
 using TaxiFair.Domain.Repository;
 using TaxiFair.Domain.Services;
 using TaxiFair.Infrastructure;
+using TaxiFairDummy;
 using TestHelper;
 
 namespace TaxiFareTests
@@ -15,124 +14,110 @@ namespace TaxiFareTests
     public class TaxiFairApplicationServiceTest
     {
         private TaxiFairApplicationService _target;
-        private IFareRateRepository _stubFareRateRepository;
-        private ICompanyFeeRepository _stubCompanyFeeRepository;
-        private ICarRepository _stubCarRepository;
-        private ITaxiFairCalculatorService _stubTaxiFairCalculatorService;
-        private IFareRateService _stubFareRateService;
-        private FareRateDto _fakeFareRateDto;
-        private IEnumerable<FareRate> _fakeAllFareRates = new List<FareRate>();
-        private Car _fakeCar;
-        private CompanyFee _fakeFee;
-        private TaxiFairDto _fakeTaxiFairDto;
-        private double EXPECTED_FAIR = 10;
-        private IDateTimeWrapper _stubDateTimeWrapper;
-        private DateTime _fakeDayDate = new DateTime(2019,01,15,15,00,00);
-        private DateTime _fakeNightDate = new DateTime(2019,01,23,15,00,00);
-        private const double DAY_RATE = 1.5;
-        private const double NIGHT_RATE = 2;
-        private const double COMPANY_FEE = 5;
-        private const double DISTANCE = 10;
+        private IFareRateRepository _fakeFareRateRepository;
+        private ICompanyFeeRepository _fakeCompanyFeeRepository;
+        private ICarRepository _fakeCarRepository;
+        private ITaxiFairCalculatorService _fakeTaxiFairCalculatorService;
+        private IFareRateService _fakeFareRateService;
+        private IDateTimeWrapper _fakeDateTimeWrapper;
 
-        private const string FAKE_LICENSE = "License";
-        private const string DRIVER_NAME = "DriverName";
-        private const string OWNER_NAME = "OwnerName";
-        private const string COMPANY_NAME = "companyName";
+        private double EXPECTED_FAIR = 10;
+
 
         [TestInitialize]
         public void InIt()
         {
-            _stubFareRateRepository = A.Fake<IFareRateRepository>();
-            _stubCompanyFeeRepository = A.Fake<ICompanyFeeRepository>();
-            _stubCarRepository = A.Fake<ICarRepository>();
-            _stubTaxiFairCalculatorService = A.Fake<ITaxiFairCalculatorService>();
-            _stubFareRateService  = A.Fake<IFareRateService>();
-            _stubDateTimeWrapper = A.Fake<IDateTimeWrapper>();
+            _fakeFareRateRepository = A.Fake<IFareRateRepository>();
+            _fakeCompanyFeeRepository = A.Fake<ICompanyFeeRepository>();
+            _fakeCarRepository = A.Fake<ICarRepository>();
+            _fakeTaxiFairCalculatorService = A.Fake<ITaxiFairCalculatorService>();
+            _fakeFareRateService  = A.Fake<IFareRateService>();
+            _fakeDateTimeWrapper = A.Fake<IDateTimeWrapper>();
 
             _target = new TaxiFairApplicationService(
-                _stubFareRateRepository, _stubCompanyFeeRepository, 
-                _stubCarRepository, _stubFareRateService, 
-                _stubTaxiFairCalculatorService, _stubDateTimeWrapper);
+                _fakeFareRateRepository, _fakeCompanyFeeRepository, 
+                _fakeCarRepository, _fakeFareRateService, 
+                _fakeTaxiFairCalculatorService, _fakeDateTimeWrapper);
         }
 
         [TestMethod]
         public void Calculate_FareRateRepositoryWasCalled_ReturnFair()
         {
-            _fakeFareRateDto = new FareRateDto(DISTANCE, FAKE_LICENSE);
-            var actual = _target.Calculate(_fakeFareRateDto);
+            Dummy.FareRateDto = new FareRateDto(Dummy.DISTANCE, Dummy.FAKE_LICENSE);
+            var actual = _target.Calculate(Dummy.FareRateDto);
 
-            A.CallTo(() => _stubFareRateRepository.GetAll()).MustHaveHappened();
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).MustHaveHappened();
         }
 
         [TestMethod]
         public void Calculate_CarRepositoryWasCalledWithLicense_ReturnFair()
         {
-            _fakeFareRateDto = new FareRateDto(DISTANCE, FAKE_LICENSE);
-            var actual = _target.Calculate(_fakeFareRateDto);
+            Dummy.FareRateDto = new FareRateDto(Dummy.DISTANCE, Dummy.FAKE_LICENSE);
+            var actual = _target.Calculate(Dummy.FareRateDto);
 
-            A.CallTo(() => _stubCarRepository.Get(_fakeFareRateDto.License)).MustHaveHappened();
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.FareRateDto.License)).MustHaveHappened();
         }
 
         [TestMethod]
         public void Calculate_CompanyFeeRepositoryCalledWithCompanyNAme_ReturnFair()
         {
-            _fakeFareRateDto = new FareRateDto(DISTANCE, FAKE_LICENSE);
-            _fakeCar = new Car(_fakeFareRateDto.License, DRIVER_NAME, OWNER_NAME, COMPANY_NAME);
+            Dummy.FareRateDto = new FareRateDto(Dummy.DISTANCE, Dummy.FAKE_LICENSE);
+            Dummy.Car = new Car(Dummy.FareRateDto.License, Dummy.DRIVER_NAME, Dummy.OWNER_NAME, Dummy.COMPANY_NAME);
 
-            A.CallTo(() => _stubCarRepository.Get(_fakeFareRateDto.License)).Returns(_fakeCar);
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.FareRateDto.License)).Returns(Dummy.Car);
 
-            var actual = _target.Calculate(_fakeFareRateDto);
+            var actual = _target.Calculate(Dummy.FareRateDto);
 
-            A.CallTo(() => _stubCompanyFeeRepository.Get(_fakeCar.CompanyName)).MustHaveHappened();
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.Car.CompanyName)).MustHaveHappened();
         }
 
         [TestMethod]
         public void Calculate_FareRateServiceCalledWithDayDate_ReturnFair()
         {
-            _fakeFareRateDto = new FareRateDto(DISTANCE, FAKE_LICENSE, _fakeDayDate);
-            _fakeCar = new Car(_fakeFareRateDto.License, DRIVER_NAME, OWNER_NAME, COMPANY_NAME);
-            _fakeFee = new CompanyFee(COMPANY_NAME,COMPANY_FEE);
+            Dummy.FareRateDto = new FareRateDto(Dummy.DISTANCE, Dummy.FAKE_LICENSE, Dummy.DayDate);
+            Dummy.Car = new Car(Dummy.FareRateDto.License, Dummy.DRIVER_NAME, Dummy.OWNER_NAME, Dummy.COMPANY_NAME);
+            Dummy.Fee = new CompanyFee(Dummy.COMPANY_NAME, Dummy.COMPANY_FEE_5);
 
-            A.CallTo(() => _stubDateTimeWrapper.Now()).Returns(_fakeDayDate);
+            A.CallTo(() => _fakeDateTimeWrapper.Now()).Returns(Dummy.DayDate);
 
-            A.CallTo(() => _stubFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(Dummy.AllFareRates);
 
-            A.CallTo(() => _stubCarRepository.Get(_fakeFareRateDto.License)).Returns(_fakeCar);
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.FareRateDto.License)).Returns(Dummy.Car);
 
-            A.CallTo(() => _stubCompanyFeeRepository.Get(_fakeCar.CompanyName)).Returns(_fakeFee);
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.Car.CompanyName)).Returns(Dummy.Fee);
 
-            var actual = _target.Calculate(_fakeFareRateDto);
+            var actual = _target.Calculate(Dummy.FareRateDto);
 
-            A.CallTo(() => _stubFareRateService.GetRate(_fakeFareRateDto.Date.TimeOfDay,_fakeAllFareRates)
+            A.CallTo(() => _fakeFareRateService.GetRate(Dummy.FareRateDto.Date.TimeOfDay, Dummy.AllFareRates)
             ).MustHaveHappened();
         }
 
         [TestMethod]
         public void Calculate_TaxiFairCalculateDayDate_ReturnFair()
         {
-            _fakeFareRateDto = new FareRateDto(DISTANCE, FAKE_LICENSE, _fakeDayDate);
-            _fakeCar = new Car(_fakeFareRateDto.License, DRIVER_NAME, OWNER_NAME, COMPANY_NAME);
-            _fakeFee = new CompanyFee(COMPANY_NAME, COMPANY_FEE);
+            Dummy.FareRateDto = new FareRateDto(Dummy.DISTANCE, Dummy.FAKE_LICENSE, Dummy.DayDate);
+            Dummy.Car = new Car(Dummy.FareRateDto.License, Dummy.DRIVER_NAME, Dummy.OWNER_NAME, Dummy.COMPANY_NAME);
+            Dummy.Fee = new CompanyFee(Dummy.COMPANY_NAME, Dummy.COMPANY_FEE_5);
 
-            A.CallTo(() => _stubDateTimeWrapper.Now()).Returns(_fakeDayDate);
+            A.CallTo(() => _fakeDateTimeWrapper.Now()).Returns(Dummy.DayDate);
 
-            A.CallTo(() => _stubFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(Dummy.AllFareRates);
 
-            A.CallTo(() => _stubCarRepository.Get(_fakeFareRateDto.License)).Returns(_fakeCar);
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.FareRateDto.License)).Returns(Dummy.Car);
 
-            A.CallTo(() => _stubCompanyFeeRepository.Get(_fakeCar.CompanyName)).Returns(_fakeFee);
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.Car.CompanyName)).Returns(Dummy.Fee);
 
-            A.CallTo(() => _stubFareRateService.GetRate(_fakeFareRateDto.Date.TimeOfDay, _fakeAllFareRates)
-            ).Returns(DAY_RATE);
+            A.CallTo(() => _fakeFareRateService.GetRate(Dummy.FareRateDto.Date.TimeOfDay, Dummy.AllFareRates)
+            ).Returns(Dummy.DAY_RATE);
 
 
-            _fakeTaxiFairDto = new TaxiFairDto(DAY_RATE,COMPANY_FEE,DISTANCE);
+            Dummy.TaxiFairDto = new TaxiFairDto(Dummy.DAY_RATE, Dummy.COMPANY_FEE_5, Dummy.DISTANCE);
 
-            A.CallTo(() => _stubTaxiFairCalculatorService
+            A.CallTo(() => _fakeTaxiFairCalculatorService
                 .Calculate(A<TaxiFairDto>.That
-                    .Matches(a => CompareReferenceObjects.Compare(_fakeTaxiFairDto,a))))
+                    .Matches(a => CompareReferenceObjects.Compare(Dummy.TaxiFairDto,a))))
                 .Returns(EXPECTED_FAIR);
-            var actual = _target.Calculate(_fakeFareRateDto);
+            var actual = _target.Calculate(Dummy.FareRateDto);
 
             Assert.AreEqual(EXPECTED_FAIR,actual);
         }

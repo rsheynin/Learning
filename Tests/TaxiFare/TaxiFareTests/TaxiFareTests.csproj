@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\TaxiFairDummy\TaxiFairDummy.csproj" />
     <ProjectReference Include="..\..\..\TaxiFair\TaxiFair.Application\TaxiFair.Application.csproj" />
     <ProjectReference Include="..\..\..\TaxiFair\TaxiFair.Domain\TaxiFair.Domain.csproj" />
     <ProjectReference Include="..\..\TestHelper\TestHelper.csproj" />

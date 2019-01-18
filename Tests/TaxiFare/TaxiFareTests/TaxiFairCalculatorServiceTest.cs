@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TaxiFair.Domain;
 using TaxiFair.Domain.Services;
+using TaxiFairDummy;
 
 namespace TaxiFareTests
 {
@@ -9,9 +10,7 @@ namespace TaxiFareTests
     public class TaxiFairCalculatorServiceTest
     {
         private TaxiFairCalculatorService _target;
-        private double FAKE_RATE_2 = 2;
-        private double FAKE_FEE_3 = 3;
-        private TaxiFairDto _fakeTaxiFairDto;
+
         private double FAKE_DISTANCE_4 = 4;
         private double FAKE_DISTANCE_0 = 0;
         private double TAXI_FAIR_RESULT_3 = 3;
@@ -27,27 +26,27 @@ namespace TaxiFareTests
         [TestMethod]
         public void Calculate_DistanceZero_ReturnFair()
         {
-            _fakeTaxiFairDto = new TaxiFairDto(FAKE_RATE_2, FAKE_FEE_3, FAKE_DISTANCE_0);
+            Dummy.TaxiFairDto = new TaxiFairDto(Dummy.NIGHT_RATE, Dummy.COMPANY_FEE_3, FAKE_DISTANCE_0);
 
-            var actual = _target.Calculate(_fakeTaxiFairDto);
+            var actual = _target.Calculate(Dummy.TaxiFairDto);
             actual.Should().Be(TAXI_FAIR_RESULT_3);
         }
 
         [TestMethod]
         public void Calculate_FareRateZero_ReturnFair()
         {
-            _fakeTaxiFairDto = new TaxiFairDto(FAKE_RATE_0, FAKE_FEE_3, FAKE_DISTANCE_4);
+            Dummy.TaxiFairDto = new TaxiFairDto(FAKE_RATE_0, Dummy.COMPANY_FEE_3, FAKE_DISTANCE_4);
 
-            var actual = _target.Calculate(_fakeTaxiFairDto);
+            var actual = _target.Calculate(Dummy.TaxiFairDto);
             actual.Should().Be(TAXI_FAIR_RESULT_3);
         }
 
         [TestMethod]
         public void Calculate_RateAndFeeAndDistance_ReturnFair()
         {
-            _fakeTaxiFairDto = new TaxiFairDto(FAKE_RATE_2,FAKE_FEE_3,FAKE_DISTANCE_4);
+            Dummy.TaxiFairDto = new TaxiFairDto(Dummy.NIGHT_RATE,Dummy.COMPANY_FEE_3,FAKE_DISTANCE_4);
 
-            var actual = _target.Calculate(_fakeTaxiFairDto);
+            var actual = _target.Calculate(Dummy.TaxiFairDto);
             actual.Should().Be(TAXI_FAIR_RESULT_11);
         }
 
