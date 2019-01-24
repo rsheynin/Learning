@@ -48,17 +48,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHelper", "Tests\TestHel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculator.Application.Service.Tests", "Tests\Calculator\Calculator.Application.Service\Calculator.Application.Service.Tests.csproj", "{868823B7-E044-4354-A584-9E121A760418}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxiFair.Infrastructure", "TaxiFair\TaxiFair.Infrastructure\TaxiFair.Infrastructure.csproj", "{FC55676A-2C4A-4A70-9A35-19FFA66076A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxiFair.Infrastructure", "TaxiFair\TaxiFair.Infrastructure\TaxiFair.Infrastructure.csproj", "{FC55676A-2C4A-4A70-9A35-19FFA66076A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxiFareIntegrationTests", "Tests\TaxiFare\TaxiFareIntegrationTests\TaxiFareIntegrationTests.csproj", "{B8E18082-70B2-421B-88B9-13D3B3DBD2BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxiFareTests", "Tests\TaxiFare\TaxiFareTests\TaxiFareTests.csproj", "{C6B6E1DB-26A1-41CF-A94E-8726D816D433}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxiFair.Application", "TaxiFair\TaxiFair.Application\TaxiFair.Application.csproj", "{17383DDF-5648-441A-AE92-567E91010F02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxiFair.Application", "TaxiFair\TaxiFair.Application\TaxiFair.Application.csproj", "{17383DDF-5648-441A-AE92-567E91010F02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxiFair.Domain", "TaxiFair\TaxiFair.Domain\TaxiFair.Domain.csproj", "{AB2D0EAD-8926-4012-B39D-BB6FEFD444CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxiFair.Domain", "TaxiFair\TaxiFair.Domain\TaxiFair.Domain.csproj", "{AB2D0EAD-8926-4012-B39D-BB6FEFD444CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxiFairDummy", "TaxiFairDummy\TaxiFairDummy.csproj", "{E79D44AA-ABD5-4474-AE3C-63A9571B6E7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxiFairDummy", "Tests\TaxiFare\TaxiFairDummy\TaxiFairDummy.csproj", "{D302C652-5C83-463A-8B2A-D7C9D1848C0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,10 +130,10 @@ Global
 		{AB2D0EAD-8926-4012-B39D-BB6FEFD444CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB2D0EAD-8926-4012-B39D-BB6FEFD444CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB2D0EAD-8926-4012-B39D-BB6FEFD444CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E79D44AA-ABD5-4474-AE3C-63A9571B6E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E79D44AA-ABD5-4474-AE3C-63A9571B6E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E79D44AA-ABD5-4474-AE3C-63A9571B6E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E79D44AA-ABD5-4474-AE3C-63A9571B6E7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D302C652-5C83-463A-8B2A-D7C9D1848C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D302C652-5C83-463A-8B2A-D7C9D1848C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D302C652-5C83-463A-8B2A-D7C9D1848C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D302C652-5C83-463A-8B2A-D7C9D1848C0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,7 +161,7 @@ Global
 		{C6B6E1DB-26A1-41CF-A94E-8726D816D433} = {4A6271FB-B351-4CB9-BEF3-54B1C374530A}
 		{17383DDF-5648-441A-AE92-567E91010F02} = {DF1F163A-C301-4BD7-A92C-3AC5597351FB}
 		{AB2D0EAD-8926-4012-B39D-BB6FEFD444CE} = {DF1F163A-C301-4BD7-A92C-3AC5597351FB}
-		{E79D44AA-ABD5-4474-AE3C-63A9571B6E7D} = {4A6271FB-B351-4CB9-BEF3-54B1C374530A}
+		{D302C652-5C83-463A-8B2A-D7C9D1848C0C} = {4A6271FB-B351-4CB9-BEF3-54B1C374530A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93E0B9B2-E7D6-409F-B522-6417083E11A1}

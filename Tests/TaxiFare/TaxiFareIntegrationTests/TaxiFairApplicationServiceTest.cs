@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
 using Autofac;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TaxiFair.Application;
 using TaxiFair.Application.IoC;
-using TaxiFair.Domain;
 using TaxiFair.Domain.Repository;
 using TaxiFair.Domain.Services;
 using TaxiFair.Infrastructure;
+using TaxiFairDummy;
 
 namespace TaxiFareIntegrationTests
 {
@@ -16,29 +15,14 @@ namespace TaxiFareIntegrationTests
     public class TaxiFairApplicationServiceTest
     {
         private TaxiFairApplicationService _target;
-        private IFareRateRepository _fakeFareRateRepository;
-        private ICompanyFeeRepository _stubCompanyFeeRepository;
-        private ICarRepository _stubCarRepository;
+
         private IFareRateService _fareRateService;
         private ITaxiFairCalculatorService _taxiFairCalculatorService;
-        private IDateTimeWrapper _stubDateTimeWrapper;
-        private FareRateDto _dummyFareRateDto = new FareRateDto(10, "license");
 
-        private DateTime _fakeDayDate = new DateTime(2019, 01, 15, 15, 00, 00);
-        private DateTime _fakeNightDate = new DateTime(2019, 01, 15, 23, 00, 00);
-
-
-        private static readonly TimeSpan _fakeMorningTimeSpan = new TimeSpan(8, 0, 0);
-        private static readonly TimeSpan _fakeEveningTimeStamp = new TimeSpan(20, 0, 0);
-
-        private static FareRate _fakeDayFareRate = new FareRate("Day", 1, _fakeMorningTimeSpan, _fakeEveningTimeStamp);
-
-        private static FareRate _fakeNightFareRate = new FareRate("Day", 1.5, _fakeEveningTimeStamp, _fakeMorningTimeSpan);
-        
-        private IEnumerable<FareRate> _fakeAllFareRates = new List<FareRate>
-        {
-            _fakeDayFareRate, _fakeNightFareRate
-        };
+        private IFareRateRepository _fakeFareRateRepository;
+        private ICompanyFeeRepository _fakeCompanyFeeRepository;
+        private ICarRepository _fakeCarRepository;
+        private IDateTimeWrapper _fakeDateTimeWrapper;
 
         [TestInitialize]
         public void InIt()
@@ -53,40 +37,90 @@ namespace TaxiFareIntegrationTests
             _taxiFairCalculatorService = container.Resolve<ITaxiFairCalculatorService>();
 
             _fakeFareRateRepository = A.Fake<IFareRateRepository>();
-            _stubCompanyFeeRepository = A.Fake<ICompanyFeeRepository>();
-            _stubCarRepository = A.Fake<ICarRepository>();
-            _stubDateTimeWrapper = A.Fake<IDateTimeWrapper>();
+            _fakeCompanyFeeRepository = A.Fake<ICompanyFeeRepository>();
+            _fakeCarRepository = A.Fake<ICarRepository>();
+            _fakeDateTimeWrapper = A.Fake<IDateTimeWrapper>();
 
             _target = new TaxiFairApplicationService(_fakeFareRateRepository,
-                _stubCompanyFeeRepository,
-                _stubCarRepository,
+                _fakeCompanyFeeRepository,
+                _fakeCarRepository,
                 _fareRateService,
                 _taxiFairCalculatorService,
-                _stubDateTimeWrapper);
+                _fakeDateTimeWrapper);
         }
 
         [TestMethod]
         public void Calculate_DayRate_ReturnRate()
         {
-            A.CallTo(() => _stubDateTimeWrapper.Now()).Returns(_fakeDayDate);
+            A.CallTo(() => _fakeDateTimeWrapper.Now()).Returns(Dummy.DayDate);
 
-            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(Dummy.AllFareRates);
 
-            var actual = _target.Calculate(_dummyFareRateDto);
-            var expected = 10;
-            Assert.AreEqual(expected, actual);
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.LICENSE1)).Returns(Dummy.Car1);
+
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.COMPANY_NAME1)).Returns(Dummy.CompanyFee1);
+
+            var actual = _target.Calculate(Dummy.FareRateDto_Distance_10_Licence_1);
+
+            var expected = 16;
+
+            actual.Should().Be(expected);
         }
 
         [TestMethod]
         public void Calculate_NightRate_ReturnRate()
         {
-            A.CallTo(() => _stubDateTimeWrapper.Now()).Returns(_fakeNightDate);
+            A.CallTo(() => _fakeDateTimeWrapper.Now()).Returns(Dummy.NightDate);
 
-            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(_fakeAllFareRates);
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.LICENSE2)).Returns(Dummy.Car2);
 
-            var actual = _target.Calculate(_dummyFareRateDto);
-            var expected = 15;
-            Assert.AreEqual(expected, actual);
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(Dummy.AllFareRates);
+
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.COMPANY_NAME2)).Returns(Dummy.CompanyFee2);
+
+            var actual = _target.Calculate(Dummy.FareRateDto_Distance_10_Licence_2);
+
+            var expected = 22;
+
+            actual.Should().Be(expected);
+        }
+
+
+        [TestMethod]
+        public void Calculate_NightRateCompanyFeeZero_ReturnRate()
+        {
+            A.CallTo(() => _fakeDateTimeWrapper.Now()).Returns(Dummy.NightDate);
+
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.LICENSE)).Returns(Dummy.Car);
+
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(Dummy.AllFareRates);
+
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.COMPANY_NAME)).Returns(Dummy.CompanyFee3);
+
+            var actual = _target.Calculate(Dummy.FareRateDto_Distance_10);
+
+            var expected = 20;
+
+            actual.Should().Be(expected);
+        }
+
+
+        [TestMethod]
+        public void Calculate_NightRateFareRateZero_ReturnRate()
+        {
+            A.CallTo(() => _fakeDateTimeWrapper.Now()).Returns(Dummy.DayDate);
+
+            A.CallTo(() => _fakeCarRepository.Get(Dummy.LICENSE1)).Returns(Dummy.Car1);
+
+            A.CallTo(() => _fakeFareRateRepository.GetAll()).Returns(Dummy.AllFareRatesDayIsZero);
+
+            A.CallTo(() => _fakeCompanyFeeRepository.Get(Dummy.COMPANY_NAME1)).Returns(Dummy.CompanyFee1);
+
+            var actual = _target.Calculate(Dummy.FareRateDto_Distance_10_Licence_1);
+
+            var expected = 1;
+
+            actual.Should().Be(expected);
         }
     }
 }

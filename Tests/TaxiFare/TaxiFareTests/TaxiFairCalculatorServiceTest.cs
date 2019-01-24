@@ -49,20 +49,5 @@ namespace TaxiFareTests
             var actual = _target.Calculate(Dummy.TaxiFairDto);
             actual.Should().Be(TAXI_FAIR_RESULT_11);
         }
-
-
-        //[TestMethod]
-        //public void GetFee_ExistingLicense_ReturnFee()
-        //{
-        //    var actual = _target.GetFee(FAKE_LICENSE_1);
-        //    actual.Should().Be(COMPANY_FEE_1);
-        //}
-
-        //[ExpectedException(typeof(ArgumentException))]
-        //[TestMethod]
-        //public void GetFee_DaytimeMissingFareRateTimeRange_Throw()
-        //{
-        //    var actual = _target.GetFee(FAKE_LICENSE_1);
-        //}
     }
 }

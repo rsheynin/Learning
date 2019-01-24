@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TaxiFair.Domain;
 using TaxiFair.Domain.Services;
 using TaxiFairDummy;
 
@@ -15,7 +13,6 @@ namespace TaxiFareTests
         private double _expectedDayFareRate = 1.5;
         private double _expectedNightFareRate = 2;
 
-        private readonly List<FareRate> _fakeFareRates = new List<FareRate>();
 
         [TestInitialize]
         public void InIt()
@@ -27,26 +24,21 @@ namespace TaxiFareTests
         [TestMethod]
         public void GetRate_DaytimeMissingFareRateTimeRange_Throw()
         {
-            _target.GetRate(Dummy.DayTimeSpan, _fakeFareRates);
+            _target.GetRate(Dummy.DayTimeSpan, Dummy.FareRatesEmptyList);
         }
         
         [TestMethod]
         public void GetRate_Daytime_ReturnRate()
         {
-            _fakeFareRates.Add(Dummy.FareRateDay);
-            
-            var actual = _target.GetRate(Dummy.DayTimeSpan, _fakeFareRates);
+            var actual = _target.GetRate(Dummy.DayTimeSpan, Dummy.AllFareRates);
 
             actual.Should().Be(_expectedDayFareRate);
         }
 
         [TestMethod]
-        public void GetRate_NightAndDayRateHightTime_ReturnNightRate()
+        public void GetRate_NightAndDayRateNightTime_ReturnNightRate()
         {
-            _fakeFareRates.Add(Dummy.FareRateDay);
-            _fakeFareRates.Add(Dummy.FareRateNight);
-            
-            var actual = _target.GetRate(Dummy.NightTimeSpan, _fakeFareRates);
+            var actual = _target.GetRate(Dummy.NightTimeSpan, Dummy.AllFareRates);
 
             actual.Should().Be(_expectedNightFareRate);
         }
